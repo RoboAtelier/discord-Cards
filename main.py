@@ -16,7 +16,6 @@ handler = logging.FileHandler(filename='discordverbose.log', mode='a', encoding=
 handler.setFormatter(logging.Formatter(fmt='%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-"""
 # Mongo database connection
 mongo = MongoClient(credentials.HOST, 
     port=credentials.PORT,  
@@ -28,6 +27,7 @@ mongo = MongoClient(credentials.HOST,
 # Create new bot object.
 BOT = discord.Client()
 
+"""
 logdir = '{}\\{}'.format(path.dirname(__file__), 'logs')
 errlogdir = logdir + '\\error'
 botlog = logdir + '\\feybot.log'
@@ -141,6 +141,5 @@ async def call_command(message, command, content, logstore):
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
             elif command in cmdconfig.practice_keywords:
                 await practice.practice_command(message, bot, mongo, content, logstore)
-
-bot.run(token)
 """
+bot.run(BOT_TOKEN)
