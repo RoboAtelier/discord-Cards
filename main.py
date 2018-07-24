@@ -25,7 +25,7 @@ mongo = MongoClient(credentials.HOST,
 )
 
 # Create new bot object.
-BOT = discord.Client()
+bot = discord.Client()
 
 """
 logdir = '{}\\{}'.format(path.dirname(__file__), 'logs')
