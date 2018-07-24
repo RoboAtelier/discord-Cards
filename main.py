@@ -5,7 +5,7 @@ import re
 from token import BOT_TOKEN
 #from core.commands import cmdconfig, practice, prefix, register
 #from core.functions import logwriter, messenger
-#from core.mongo import credentials, checkqueries, findqueries
+from core.mongo import credentials, checkqueries, findqueries
 from pymongo import MongoClient, errors
 from os import path
 
