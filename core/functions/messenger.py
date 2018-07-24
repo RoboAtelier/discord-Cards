@@ -9,7 +9,7 @@ async def send_timed_message(bot, time, message, *targets):
 
     Sends a single timed message to target channel(s).
 
-    Returns true if successful.
+    Returns True if successful.
 
     :param `bot`: - bot that will send the message
 
@@ -36,13 +36,15 @@ async def send_timed_message(bot, time, message, *targets):
             + '\nMessage: {} Channel: {}'.format(message, channel.id)
             + '\nServer: {}'.format(channel.server.id)
             + '\n{}'.format(err))
-        logwriter.write_log(log, logwriter.errlogdir + '\\messenger.log')
+        logwriter.write_log(log, logwriter.ERR_LOG_DIR + '\\messenger.err')
         return False
 
 async def send_timed_interval_message(bot, time, messages, interval=1, *targets):
     """(async)
     
     Sends multiple timed message strings in intervals to target channel(s).
+
+    Returns True if successful.
 
     :param `bot`: - bot that will send the message
 
@@ -64,7 +66,7 @@ async def send_timed_interval_message(bot, time, messages, interval=1, *targets)
     if isinstance(messages, str):
         log = ('Error occurred: Invalid message input was passed.'
             + '\nInput: {}'.format(str(messages)))
-        logwriter.write_log(log, logwriter.errlogdir + '\\messenger.log')
+        logwriter.write_log(log, logwriter.ERR_LOG_DIR + '\\messenger.log')
         return False
     else:
         try:
@@ -89,6 +91,6 @@ async def send_timed_interval_message(bot, time, messages, interval=1, *targets)
                 + '\nMessages: {} Channel: #{}'.format(str(messages), channel.id)
                 + '\nServer: {}'.format(channel.server.id)
                 + '\n{}'.format(err))
-            logwriter.write_log(log, logwriter.errlogdir + '\\messenger.log')
+            logwriter.write_log(log, logwriter.ERR_LOG_DIR + '\\messenger.err')
             return False
     

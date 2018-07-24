@@ -7,7 +7,7 @@ Records user command usage, server changes, errors, and more.
 from os import path
 from datetime import datetime
 
-FUNC_ERR_LOG = path.dirname(path.dirname(__file__)) + '\\logs\\error\\logwriter.err'
+ERR_LOG_DIR = path.dirname(path.dirname(__file__)) + '\\logs\\error'
 
 def write_log(log, *paths):
 
@@ -34,7 +34,7 @@ def write_log(log, *paths):
             + '\nCould not open file at: {}'.format(path)
             + '\n{}'.format(err))
         try:
-            logfile = open(FUNC_ERR_LOG, 'a+', encoding='utf-8')
+            logfile = open(ERR_LOG_DIR + '\\logwriter.err', 'a+', encoding='utf-8')
             logfile.write(timestamp + log + '\n')
             logfile.close()
         except:
@@ -47,7 +47,7 @@ def write_log(log, *paths):
             + '\n\tCould not write: {}'.format(log)
             + '\n\t{}'.format(err))
         try:
-            logfile = open(FUNC_ERR_LOG, 'a+', encoding='utf-8')
+            logfile = open(ERR_LOG_DIR + '\\logwriter.err', 'a+', encoding='utf-8')
             logfile.write(timestamp + log + '\n')
             logfile.close()
         except:
