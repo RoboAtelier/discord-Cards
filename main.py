@@ -21,18 +21,17 @@ mongo = MongoClient(credentials.HOST,
     port=credentials.PORT,  
     username=credentials.USERNAME,
     password=credentials.PASSWORD,
-    authSource=credentials.AUTHSRC
+    authSource=credentials.AUTH_SRC
 )
 
 # Create new bot object.
 bot = discord.Client()
 
-"""
-logdir = '{}\\{}'.format(path.dirname(__file__), 'logs')
-errlogdir = logdir + '\\error'
-botlog = logdir + '\\feybot.log'
-discorderrlog = errlogdir + '\\discorderror.log'
-mongoerrlog = errlogdir + '\\mongoerror.log'
+LOG_DIR = '{}\\{}'.format(path.dirname(__file__), 'logs')
+ERR_LOG_DIR = LOG_DIR + '\\error'
+BOT_LOG = LOG_DIR + '\\cards.log'
+DISCORD_ERR_LOG = ERR_LOG_DIR + '\\discord.err'
+MONGO_ERR_LOG = ERR_LOG_DIR + '\\mongo.err'
 
 class LogStore:
 
@@ -102,28 +101,6 @@ async def on_message(message):
         except Exception as err:
             print('oof')
             print(err)
-    '''
-    if message.content.startswith(','):
-        content = '(' + message.content[1:].lstrip() + ')'
-        content = content.replace('=', '')
-        content = content.replace(' ', '')
-        left = 0
-        right = 0
-        for c in content:
-            if c == '(':
-                left += 1
-            elif c == ')':
-                right += 1
-        if not left == right:
-            print('Unclosed expression')
-        else:
-            postfix = to_postfix(content)
-            print(postfix)
-            print(eval_postfix(postfix))
-            await bot.send_message(message.channel, eval_postfix(postfix))
-
-        print(left)
-        print(right)'''
 
 async def call_command(message, command, content, logstore):
 
@@ -141,5 +118,5 @@ async def call_command(message, command, content, logstore):
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
             elif command in cmdconfig.practice_keywords:
                 await practice.practice_command(message, bot, mongo, content, logstore)
-"""
+
 bot.run(BOT_TOKEN)
