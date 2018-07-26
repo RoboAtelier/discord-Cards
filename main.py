@@ -4,7 +4,7 @@ import logging
 import re
 from token import BOT_TOKEN
 #from core.commands import cmdconfig, practice, prefix, register
-#from core.functions import logwriter, messenger
+from core.functions import logwriter, messenger
 from core.mongo import credentials, checkqueries, findqueries
 from pymongo import MongoClient, errors
 from os import path
@@ -27,34 +27,25 @@ mongo = MongoClient(credentials.HOST,
 # Create new bot object.
 bot = discord.Client()
 
-LOG_DIR = '{}\\{}'.format(path.dirname(__file__), 'logs')
-ERR_LOG_DIR = LOG_DIR + '\\error'
-BOT_LOG = LOG_DIR + '\\cards.log'
-DISCORD_ERR_LOG = ERR_LOG_DIR + '\\discord.err'
-MONGO_ERR_LOG = ERR_LOG_DIR + '\\mongo.err'
+BOT_LOG = logwriter.LOG_DIR + '\\cards.log'
+DISCORD_ERR_LOG = logwriter.ERR_LOG_DIR + '\\discord.err'
+MONGO_ERR_LOG = logwriter.ERR_LOG_DIR + '\\mongo.err'
 
 class LogStore:
 
-    def __init__(self):
-        self.mainlogdir = logdir
-        self.userlog = None
-        self.serverlog = None
-        self.pmlog = None
+    __slots__ = ['userlog', 'serverlog', 'dmlog']
 
-    def set_user_log(self, userlog):
-        self.userlog = '{}\\user\\{}'.format(self.mainlogdir, userlog)
-
-    def set_server_log(self, serverlog):
-        self.serverlog = '{}\\server\\{}'.format(self.mainlogdir, serverlog)
-
-    def set_pm_log(self, pmlog):
-        self.pmlog = '{}\\pm\\{}'.format(self.mainlogdir, pmlog)
+    def __init__(self, userlog, serverlog, dmlog):
+        self.userlog = userlog
+        self.serverlog = serverlog
+        self.dmlog = dmlog
 
 @bot.event
 async def on_ready():
     log = ('Cards are stacked and ready!'
-        + '\n\tBot name: {}#{}\n\tBot ID: {}\n'.format(bot.user.name, bot.user.discriminator, bot.user.id))
-    logwriter.write_log(log, botlog)
+        + '\n\tBot name: {}#{}\n\tBot ID: {}'.format(bot.user.name, 
+        bot.user.discriminator, bot.user.id))
+    logwriter.write_log(log, BOT_LOG)
 
 @bot.event
 async def on_message(message):
@@ -63,14 +54,8 @@ async def on_message(message):
     if not message.author.id == bot.user.id:
 
         try:
-            logstore = LogStore()
-            logstore.set_user_log('{}-{}#{}.log'.format(message.author.id,
-                message.author.name, message.author.discriminator))
-            if message.channel.is_private:
-                logstore.set_pm_log('{}-{}#{}.log'.format(message.author.id,
-                message.author.name, message.author.discriminator))
-            else:
-                logstore.set_server_log('{}-{}.log'.format(message.server.id, message.server.name))
+            userlog = logwriter.USER_LOG_DIR + '\\{}-{}#{}.log'.format(message.author.id,
+                message.author.name, message.author.discriminator)       
 
             msgsplit = message.content.split(' ', 1)
             cmd = msgsplit[0]
@@ -78,25 +63,32 @@ async def on_message(message):
             if len(msgsplit) > 1:
                 content = msgsplit[1].strip()
 
-            if message.channel.is_private and message.content.startswith(','):
+            if message.channel.is_private:
+                dmlog = logwriter.DM_LOG_DIR + '{}-{}#{}.log'.format(message.author.id,
+                message.author.name, message.author.discriminator)
+                logstore = LogStore(userlog, '', dmlog)
                 print('private time')
+                #await call_command(message, cmd, content, logstore)
             else:
+                serverlog = logwriter.SERVER_LOG_DIR + '{}-{}.log'.format(message.server.id,
+                message.server.name)
+                logstore = LogStore(userlog, serverlog, '')
                 find = findqueries.find_prefix(mongo, message.server)
                 if find.count(True) > 0:
                     prefix = find[0]['prefix']
                     if message.content.startswith(prefix):
                         await call_command(message, cmd[len(prefix):], content, logstore)
-                    elif message.content == ',prefix?':
+                    elif message.content == 'ccprefix?':
                         if checkqueries.is_listening_channel(mongo, message.server, message.channel):
                             messenger.send_timed_message(bot, 5,
                                 ':bulb: | My command prefix for this server: \'**{}**\''.format(prefix), message.channel)
-                        else:
-                            messenger.send_timed_message(bot, 5,
-                                ':bulb: | My command prefix for *{}*: \'**{}**\''.format(message.server.name, prefix),
-                                message.author)
-                elif message.content.startswith(','):
+                        #else:
+                            #messenger.send_timed_message(bot, 5,
+                                #':bulb: | My command prefix for *{}*: \'**{}**\''.format(message.server.name, prefix),
+                                #message.author)
+                elif message.content.startswith('cc'):
                     print('not registered')
-                    await call_command(message, cmd[1:], content, logstore)
+                    await call_command(message, cmd[2:], content, logstore)
 
         except Exception as err:
             print('oof')
@@ -116,7 +108,5 @@ async def call_command(message, command, content, logstore):
         elif checkqueries.is_listening_channel:
             if command in cmdconfig.prefix_keywords:
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
-            elif command in cmdconfig.practice_keywords:
-                await practice.practice_command(message, bot, mongo, content, logstore)
 
 bot.run(BOT_TOKEN)

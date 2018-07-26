@@ -5,7 +5,9 @@ from asyncio import sleep
 from . import logwriter
 
 async def send_timed_message(bot, time, message, *targets):
-    """(async)
+
+    """
+    (async)
 
     Sends a single timed message to target channel(s).
 
@@ -40,7 +42,9 @@ async def send_timed_message(bot, time, message, *targets):
         return False
 
 async def send_timed_interval_message(bot, time, messages, interval=1, *targets):
-    """(async)
+
+    """
+    (async)
     
     Sends multiple timed message strings in intervals to target channel(s).
 

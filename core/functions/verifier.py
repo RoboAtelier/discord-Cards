@@ -2,6 +2,7 @@ from .. import feyadmins
 from ..mongo import checkqueries
 
 def is_server_admin(member, channel):
+
     """
     Checks if the server member possesses the minimum permissions
     to add or change bots in the server (e.g. Manage Servers+).
@@ -23,6 +24,7 @@ def is_server_admin(member, channel):
         return False
 
 def is_bot_admin(member, appinfo):
+
     """
     Checks if the server member is the owner of the bot
     or is a verified administrator for it.
@@ -40,6 +42,7 @@ def is_bot_admin(member, appinfo):
         return False
 
 def verify_channel(db, server, channel):
+    
     """
     Checks if the channel is allowed to listen to commands.
     Returns true if the channel is either a primary or alt channel.
