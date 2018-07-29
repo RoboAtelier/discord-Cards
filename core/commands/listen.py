@@ -15,10 +15,10 @@ async def listen_command(message, bot, mongo, content, logstore):
     """
     (async)
 
-    `register` command:
+    `listen` command:
 
-    Adds server into the database to authorize usage of bot commands.
-    Required by all servers that add the bot in.
+    Allows the bot to listen for commands on the channel.
+    Required for all servers to use first to allow bot usage.
     Can be used in ANY channel, even after using it to register for the first time.
     
     Returns True if the process was executed successfully and changes were made.

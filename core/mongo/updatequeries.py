@@ -1,46 +1,48 @@
-'''Update queries using MongoDB'''
+"""Update queries using MongoDB"""
 
-def update_primary_channel(mongo, server, channel):
+def update_main_channel(mongo, server, channel):
 
-    '''
-    Updates the primary channel of a discord server.
+    """
+    Updates the main channel of a discord server.
 
     :param: `mongo` - mongo client
 
     :param: `server` - discord server
 
     :param: `channel` - new channel to set
-    '''
+    """
 
-    mongo.fey.discord_server.update_one(
+    mongo.cards.discord_server.update_one(
         {'server_id': server.id},
         {
             '$set': {
-                'primary_channel_id': channel.id,
-                'last_action': 'Changed Primary Channel'
+                'main_channel_id': channel.id,
+                'last_action': 'Changed Main Channel'
             },
             '$currentDate': {'date_last_modified': {'$type': 'date'}},
         }
     )
 
-def update_prefix(mongo, server, prefix):
+def update_channel_game(mongo, server, channel, games):
 
-    '''
-    Updates the prefix of a discord server.
+    """
+    Updates the type of game(s) available for a channel.
 
     :param: `mongo` - mongo client
 
     :param: `server` - discord server
 
-    :param: `prefix` - new prefix to set
-    '''
+    :param: `channel` - channel to update
 
-    mongo.fey.discord_server.update_one(
+    :param: `game` - game type
+    """
+
+    mongo.cards.discord_server.update_one(
         {'server_id': server.id},
         {
             '$set': {
                 'prefix': prefix,
-                'last_action': 'Changed Prefix'
+                'last_action': 'Changed Channel Game Hosting'
             },
             '$currentDate': {'date_last_modified': {'$type': 'date'}},
         }
