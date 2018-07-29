@@ -3,7 +3,7 @@ import discord
 import logging
 import re
 from token import BOT_TOKEN
-#from core.commands import cmdconfig, practice, prefix, register
+from core.commands import config, listen, prefix
 from core.functions import logwriter, messenger
 from core.mongo import credentials, checkqueries, findqueries
 from pymongo import MongoClient, errors
@@ -82,7 +82,7 @@ async def on_message(message):
                         if checkqueries.is_listening_channel(mongo, message.server, message.channel):
                             messenger.send_timed_message(bot, 5,
                                 ':bulb: | My command prefix for this server: \'**{}**\''.format(prefix), message.channel)
-                        #else:
+                        #else: 
                             #messenger.send_timed_message(bot, 5,
                                 #':bulb: | My command prefix for *{}*: \'**{}**\''.format(message.server.name, prefix),
                                 #message.author)
@@ -103,10 +103,10 @@ async def call_command(message, command, content, logstore):
     if message.channel.is_private:
         print('hi')
     else:
-        if command in cmdconfig.register_keywords:
-            await register.register_command(message, bot, mongo, content, logstore)
+        if command in config.LISTEN_KEYWORDS:
+            await listen.listen_command(message, bot, mongo, content, logstore)
         elif checkqueries.is_listening_channel:
-            if command in cmdconfig.prefix_keywords:
+            if command in config.PREFIX_KEYWORDS:
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
 
 bot.run(BOT_TOKEN)

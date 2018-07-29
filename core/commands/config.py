@@ -5,61 +5,57 @@ from discord import Embed
 ERR_WARNINGS = {
     'invalid_in': ':exclamation: | Invalid input. ',
     'ambig': ':exclamation: | Ambiguous input. ',
-    'no_perm': 'no_entry_sign: | You don\'t have the necessary  permissions. ',
+    'no_perm': 'no_entry_sign: | You don\'t have the necessary permissions. ',
     'exception': ':exclamation: | ',
     'error': ':no_entry_sign: | '
 }
 
-# Register command
-register_keywords = ['register', 'reg']
-register_info_embed = Embed(
+# Listen command
+LISTEN_KEYWORDS = ('listen', 'lis')
+LISTEN_INFO_EMBED = Embed(
     **{
-        'title': '__register__',
-        'description': ('Registers the server to allow usage of bot commands.'
-            + '\nRequired by all servers.'),
+        'title': '__listen__',
+        'description': 'Enables a channel to listen for this bot\'s commands.'
+            + '\nRequired by all servers to be used on a channel.',
         'colour': 0x3498db
     }
 )
-register_info_embed.add_field(
+LISTEN_INFO_EMBED.add_field(
     name='Options',
-    value='`no option` - changes primary channel (use command on a new channel)'
-    + '\n`-a` - adds an alt channel'
-    + '\n`-d` - deletes an alt channel'
-    + '\n(Mutually Exclusive)',
+    value='`no option` - adds current channel as a listening channel'
+    + '\n`-m **OR** main` - changes an alt channel into the main channel',
     inline=False
 )
-register_info_embed.add_field(
+LISTEN_INFO_EMBED.add_field(
     name='Usage',
-    value='`,register (option (channels))`'
+    value='`cclisten (option)`'
     + '\n*(Optional)*',
     inline=False
 )
-register_info_embed.add_field(
+LISTEN_INFO_EMBED.add_field(
     name='Examples',
-    value='`,register` - registers the server, or changes primary channel'
-    + '\n`,register -a bots` - sets channel \'bots\' as an alt channel'
-    + '\n`,register -d lobby` - sets channel \'lobby\' to no longer be an alt channel',
+    value='`cclisten` - adds current channel as a listening channel'
+    + '\n`cclisten main` - if current channel is an alt, it will now be the main channel',
     inline=False
 )
-register_info_embed.add_field(
+LISTEN_INFO_EMBED.add_field(
     name='Aliases',
-    value='`reg`',
+    value='`lis`',
     inline=False
 )
-register_info = ('Registers the server to allow usage of bot commands.'
-    + '\nRequired by all servers.'
-    + '\n\nOptions: `no option` - change primary channel (use command on a new channel),'
-    + '\n`-a` - adds an alt channel, `-d` - deletes an alt channel'
-    + '\n(Mutually Exclusive)'
-    + '\n\nUsage: `,register (option (channels))`'
+LISTEN_INFO = 'Enables a channel to listen for this bot\'s commands.'
+    + '\nRequired by all servers to be used on a channel.'
+    + '\n\nOptions: `no option` - adds current channel as a listening channel'
+    + '\n`-m **OR** main` - changes an alt channel into the main channel'
+    + '\n\nUsage: `cclisten (option)`'
     + '\n*(Optional)*'
-    + '\n\nExamples: `,register` - registers the server, or changes primary channel,'
-    + ' `,register -a lobby` - registers a new alt channel \'lobby\''
-    + '\n\nAliases: `reg`') 
+    + '\n\nExamples: `cclisten` - adds current channel as a listening channel'
+    + ' `cclisten main` - if current channel is an alt, it will now be the main channel'
+    + '\n\nAliases: `reg`'
 
 # Prefix command
-prefix_keywords = ['prefix', 'pre']
-prefix_info_embed = Embed(
+PREFIX_KEYWORDS = ['prefix', 'pre']
+PREFIX_INFO_EMBED = Embed(
     **{
         'title': '__prefix__',
         'description': ('Changes the command prefix for this particular server.'
@@ -67,25 +63,25 @@ prefix_info_embed = Embed(
         'colour': 0x3498db
     }
 )
-prefix_info_embed.add_field(
+PREFIX_INFO_EMBED.add_field(
     name='Usage',
-    value='`,prefix [new prefix]`'
+    value='`ccprefix [new prefix]`'
     + '\n**[Required]**',
     inline=False
 )
-prefix_info_embed.add_field(
+PREFIX_INFO_EMBED.add_field(
     name='Example',
-    value='`,prefix /` - changes prefix to \'/\'',
+    value='`ccprefix /` - changes prefix to \'/\'',
     inline=False
 )
-prefix_info_embed.add_field(
+PREFIX_INFO_EMBED.add_field(
     name='Aliases',
     value='`pre`',
     inline=False
 )
-prefix_info = ('Changes the command prefix for this particular server.'
+PREFIX_INFO = ('Changes the command prefix for this particular server.'
     + '\nUseful if the current command prefix interferes with another bot.'
-    + '\n\nUsage: `,prefix [new prefix]`'
+    + '\n\nUsage: `ccprefix [new prefix]`'
     + '\n**[Required]**'
-    + '\n\nExample: `,prefix /` - changes prefix to \'/\''
+    + '\n\nExample: `ccprefix /` - changes prefix to \'/\''
     + '\n\nAliases: `pre`')
