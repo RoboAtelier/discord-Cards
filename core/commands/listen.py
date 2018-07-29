@@ -5,9 +5,8 @@ Allows the bot to listen for commands on the channel.
 Required for all servers to use first to allow bot usage.
 """
 
-import re
 from . import config
-from ..functions import logwriter, messenger, verifier, listscanner, parameterizer
+from ..functions import logwriter, messenger, verifier
 from ..mongo import checkqueries, deletequeries, insertqueries, updatequeries
 
 async def listen_command(message, bot, mongo, content, logstore):
@@ -19,7 +18,7 @@ async def listen_command(message, bot, mongo, content, logstore):
 
     Allows the bot to listen for commands on the channel.
     Required for all servers to use first to allow bot usage.
-    Can be used in ANY channel, even after using it to register for the first time.
+    Can be used in ANY channel, even after using it for the first time.
     
     Returns True if the process was executed successfully and changes were made.
 
@@ -52,13 +51,13 @@ async def listen_command(message, bot, mongo, content, logstore):
             if option in ('-m', 'main'):
                 log = 'Nothing happened.'
                 logwriter.write_log(log, logstore.userlog)
-                await messenger.send_timed_message(bot, 5,
+                await messenger.send_timed_message(bot, 3,
                     config.ERR_WARNINGS['error'] + 'This is already the main channel.', message.channel)
                 return False
             else:
                 log = 'Nothing happened.'
                 logwriter.write_log(log, logstore.userlog)
-                await messenger.send_timed_message(bot, 5,
+                await messenger.send_timed_message(bot, 3,
                     config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.', message.channel)
                 return False
 
@@ -78,7 +77,7 @@ async def listen_command(message, bot, mongo, content, logstore):
             else:
                 log = 'Nothing happened.'
                 logwriter.write_log(log, logstore.userlog)
-                await messenger.send_timed_message(bot, 5,
+                await messenger.send_timed_message(bot, 3,
                     config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.', message.channel)
                 return False
 

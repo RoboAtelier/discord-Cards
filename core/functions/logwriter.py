@@ -19,7 +19,7 @@ def write_log(log, *paths):
     Writes a log entry with given absolute path(s).
     
     Returns True if execution was successful.
-
+ 
     :param `log`: - log entry string
 
     :param `paths`: - file path(s) to write to

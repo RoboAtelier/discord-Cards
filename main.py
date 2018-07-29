@@ -3,7 +3,7 @@ import discord
 import logging
 import re
 from token import BOT_TOKEN
-from core.commands import config, listen, prefix
+from core.commands import config, ignore, listen, prefix
 from core.functions import logwriter, messenger
 from core.mongo import credentials, checkqueries, findqueries
 from pymongo import MongoClient, errors
@@ -106,6 +106,8 @@ async def call_command(message, command, content, logstore):
         if command in config.LISTEN_KEYWORDS:
             await listen.listen_command(message, bot, mongo, content, logstore)
         elif checkqueries.is_listening_channel:
+            if command in config.IGNORE_KEYWORDS:
+                await ignore.ignore_command(message, bot, mongo, content, logstore)
             if command in config.PREFIX_KEYWORDS:
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
 
