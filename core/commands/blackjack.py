@@ -9,14 +9,14 @@ from . import config
 from ..functions import logwriter, messenger
 from ..mongo import checkqueries, deletequeries, insertqueries, updatequeries
 
-async def uno_command(message, bot, mongo, content, logstore):
+async def blackjack_command(message, bot, mongo, content, logstore):
 
     """
     (async)
 
-    `uno` command:
+    `blackjack` command:
 
-    Contains functions for playing UNO and options for rule variations.
+    Contains functions for playing blackjack.
     Games are hosted through discord servers only.
 
     :param: `message` - discord message
