@@ -5,7 +5,6 @@ Changes the server's prefix.
 Useful for an easier or memorable prefix or if it interferes with another bot.
 """
 
-from asyncio import ensure_future
 from . import config
 from ..functions import logwriter, messenger, verifier
 from ..mongo import updatequeries
