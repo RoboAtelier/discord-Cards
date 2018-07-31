@@ -43,7 +43,7 @@ LISTEN_INFO_EMBED.add_field(
     value='`lis`',
     inline=False
 )
-LISTEN_INFO = 'Enables a channel to listen for this bot\'s commands.'
+LISTEN_INFO = ('Enables a channel to listen for this bot\'s commands.'
     + '\nRequired by all servers to be used on a channel.'
     + '\n\nOptions: `no option` - adds current channel as a listening channel'
     + '\n`-m **OR** main` - changes an alt channel into the main channel'
@@ -51,7 +51,7 @@ LISTEN_INFO = 'Enables a channel to listen for this bot\'s commands.'
     + '\n*(Optional)*'
     + '\n\nExamples: `cclisten` - adds current channel as a listening channel'
     + ' `cclisten main` - if current channel is an alt, it will now be the main channel'
-    + '\n\nAliases: `reg`'
+    + '\n\nAliases: `reg`')
 
 # Ignore commands
 IGNORE_KEYWORDS = ('ignore', 'ig')
@@ -69,7 +69,7 @@ IGNORE_INFO_EMBED.add_field(
 )
 IGNORE_INFO_EMBED.add_field(
     name='Example',
-    value='`ccignore` - if current channel is an alt, it will no longer be an alt.'
+    value='`ccignore` - if current channel is an alt, it will no longer be an alt.',
     inline=False
 )
 IGNORE_INFO_EMBED.add_field(
@@ -77,10 +77,10 @@ IGNORE_INFO_EMBED.add_field(
     value='`ig`',
     inline=False
 )
-IGNORE_INFO = 'Tells the bot to no longer listen for commmands on a channel.'
+IGNORE_INFO = ('Tells the bot to no longer listen for commmands on a channel.'
     + '\n\nUsage: `ccignore`'
     + '\n\nExample: `ccignore` - if current channel is an alt, it will no longer be an alt.'
-    + '\n\nAliases: `ig`'
+    + '\n\nAliases: `ig`')
 
 # Prefix command
 PREFIX_KEYWORDS = ('prefix', 'pre')

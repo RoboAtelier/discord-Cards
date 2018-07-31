@@ -2,7 +2,7 @@ import asyncio
 import discord
 import logging
 import re
-from token import BOT_TOKEN
+from core import token
 from core.commands import config, ignore, listen, prefix
 from core.functions import logwriter, messenger
 from core.mongo import credentials, checkqueries, findqueries
@@ -111,4 +111,4 @@ async def call_command(message, command, content, logstore):
             if command in config.PREFIX_KEYWORDS:
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
 
-bot.run(BOT_TOKEN)
+bot.run(token.BOT_TOKEN)

@@ -34,7 +34,7 @@ def write_log(log, *paths):
         print(timestamp + log)
         return True
     except IOError as err:
-        errormsg = 'Error occurred: IOError'
+        errormsg = ('Error occurred: IOError'
             + '\nCould not open file at: {}'.format(path)
             + '\n{}'.format(err))
         try:
@@ -47,7 +47,7 @@ def write_log(log, *paths):
             print(timestamp + errormsg)
             return False
     except UnicodeEncodeError as err:
-        errormsg = 'Error occurred: UnicodeEncodeError'
+        errormsg = ('Error occurred: UnicodeEncodeError'
             + '\n\tCould not write: {}'.format(log)
             + '\n\t{}'.format(err))
         try:

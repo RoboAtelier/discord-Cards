@@ -61,7 +61,7 @@ async def listen_command(message, bot, mongo, content, logstore):
                     config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.', message.channel)
                 return False
 
-        else if checkqueries.is_alt_channel(mongo, message.server, message.channel):
+        elif checkqueries.is_alt_channel(mongo, message.server, message.channel):
 
             # Set alt channel as the new main channel
             if option in ('-m', 'main'):
@@ -81,7 +81,7 @@ async def listen_command(message, bot, mongo, content, logstore):
                     config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.', message.channel)
                 return False
 
-        else if checkqueries.check_discord_server(mongo, message.server):
+        elif checkqueries.check_discord_server(mongo, message.server):
 
             # Insert new alt channel into the database
             insertqueries.insert_alt_channel(mongo, message.server, message.channel)

@@ -1,4 +1,4 @@
-from .. import feyadmins
+from .. import admins
 from ..mongo import checkqueries
 
 def is_server_admin(member, channel):

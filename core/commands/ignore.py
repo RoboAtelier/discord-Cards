@@ -49,7 +49,7 @@ async def ignore_command(message, bot, mongo, content, logstore):
                 ':no_bell: | I will no longer listen to commands here.')
             return True
 
-        else if checkqueries.is_main_channel(mongo, message.server, message.channel):
+        elif checkqueries.is_main_channel(mongo, message.server, message.channel):
 
             log = 'Nothing happened.'
             logwriter.write_log(log, logstore.userlog)

@@ -75,3 +75,23 @@ def find_prefix(mongo, server):
         {'server_id': server.id},
         {'prefix': 1}
     ).limit(1)
+
+def find_uno_session(mongo, channel, username):
+
+    """
+    Finds a running UNO session with a given username.
+
+    Returns a cursor containing either a public or private UNO session
+    or None if nothing was found.
+
+    :param: `mongo` - mongo client
+
+    :param: `server` - discord server to find public sessions
+
+    :param: `username` - discord username to find private sessions
+    """
+
+    if channel.is_private:
+        return mongo.cards.dm_uno_session.find({'players': username}).limit(1)
+    else:
+        return mongo.cards.sv_uno_session.find({'channel_id': channel.id}).limit(1)

@@ -69,3 +69,17 @@ def insert_alt_channel(mongo, server, channel):
             '$currentDate': {'date_last_modified': {'$type': 'date'}}
         }
     )
+
+def insert_uno_session(mongo, server, channel, username):
+
+    """
+    Inserts a new session of UNO.
+
+    :param: `mongo` - mongo client
+
+    :param: `server` - discord server
+
+    :param: `channel` - discord channel to store
+
+    :param: `username` - discord username
+    """
