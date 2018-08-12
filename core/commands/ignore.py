@@ -45,7 +45,8 @@ async def ignore_command(message, bot, mongo, content, logstore):
             log = '#{} (ID: {}) is no longer an alt channel for this server.'.format(
                 message.channel.name, message.channel.id)
             logwriter.write_log(log, logstore.userlog, logstore.serverlog)
-            await bot.send_message(message.channel,
+            await bot.send_message(
+                message.channel,
                 ':no_bell: | I will no longer listen to commands here.')
             return True
 
@@ -53,7 +54,8 @@ async def ignore_command(message, bot, mongo, content, logstore):
 
             log = 'Nothing happened.'
             logwriter.write_log(log, logstore.userlog)
-            await messenger.send_timed_message(bot, 3,
+            await messenger.send_timed_message(
+                bot, 5,
                 config.ERR_WARNINGS['error'] + 'I can\'t ignore the main channel!', message.channel)
             return False
 

@@ -32,7 +32,7 @@ def insert_discord_server(mongo, server, channel):
     new_discordserver = {
         'server_id': server.id,
         'main_channel_id': channel.id,
-        'main_channel_games': [],
+        'channel_games': [],
         'prefix': 'cc',
         'last_change': 'Server Registered'
     }
@@ -61,7 +61,7 @@ def insert_alt_channel(mongo, server, channel):
         'channel_games': [],
         'server_id': server.id
     }
-    mongo.cards.alt_channel.insert_one(newaltchannel)
+    mongo.cards.alt_channel.insert_one(new_altchannel)
     mongo.cards.discord_server.update_one(
         {'server_id': server.id},
         {

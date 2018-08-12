@@ -20,6 +20,34 @@ def check_discord_server(mongo, server):
     else:
         return False
 
+def check_server_uno_session(mongo, server, channel):
+
+    """
+    Checks if there is a running UNO session on a given channel.
+
+    Returns True if there is a running UNO session on the given channel.
+
+    :param: `mongo` - mongo client
+
+    :param: `server` - discord server
+
+    :param: `channel` - discord channel to check
+    """
+
+    check = mongo.cards.sv_uno_session.find(
+        {
+            '$and': [
+                {'server_id': server.id},
+                {'channel_id': channel.id}
+            ]
+        },
+        {'_id': 1}
+    ).limit(1).count(True)
+    if check > 0:
+        return True
+    else:
+        return False
+
 def is_main_channel(mongo, server, channel):
 
     """

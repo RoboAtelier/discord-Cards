@@ -51,14 +51,18 @@ async def listen_command(message, bot, mongo, content, logstore):
             if option in ('-m', 'main'):
                 log = 'Nothing happened.'
                 logwriter.write_log(log, logstore.userlog)
-                await messenger.send_timed_message(bot, 3,
-                    config.ERR_WARNINGS['error'] + 'This is already the main channel.', message.channel)
+                await messenger.send_timed_message(
+                    bot, 5,
+                    config.ERR_WARNINGS['error'] + 'This is already the main channel.',
+                    message.channel)
                 return False
             else:
                 log = 'Nothing happened.'
                 logwriter.write_log(log, logstore.userlog)
-                await messenger.send_timed_message(bot, 3,
-                    config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.', message.channel)
+                await messenger.send_timed_message(
+                    bot, 5,
+                    config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.',
+                    message.channel)
                 return False
 
         elif checkqueries.is_alt_channel(mongo, message.server, message.channel):
@@ -70,15 +74,18 @@ async def listen_command(message, bot, mongo, content, logstore):
                 log = '#{} (ID: {}) is now set as the main channel of the server.'.format(
                     message.channel.name, message.channel.id)
                 logwriter.write_log(log, logstore.userlog, logstore.serverlog)
-                await bot.send_message(message.channel,
+                await bot.send_message(
+                    message.channel,
                     ':tada: | {} is now the main channel! Bot announcements will be posted here.'.format(
                         message.mention))
                 return True
             else:
                 log = 'Nothing happened.'
                 logwriter.write_log(log, logstore.userlog)
-                await messenger.send_timed_message(bot, 3,
-                    config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.', message.channel)
+                await messenger.send_timed_message(
+                    bot, 5,
+                    config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.',
+                    message.channel)
                 return False
 
         elif checkqueries.check_discord_server(mongo, message.server):
@@ -88,7 +95,8 @@ async def listen_command(message, bot, mongo, content, logstore):
             log = '#{} (ID: {}) has been added as a new alt channel for the server.'.format(
                 message.channel.name, message.channel.id)
             logwriter.write_log(log, logstore.userlog, logstore.serverlog)
-            await bot.send_message(message.channel,
+            await bot.send_message(
+                message.channel,
                 ':tada: | I will now listen for commands on this channel.')
             return True
 
@@ -98,13 +106,16 @@ async def listen_command(message, bot, mongo, content, logstore):
             insertqueries.insert_discord_server(mongo, message.server, message.channel)
             log = 'Server is now registered into the database.'
             logwriter.write_log(log, logstore.userlog, logstore.serverlog)
-            await bot.send_message(message.channel,
-                ':tada: | Main channel set! I will listen for commands and post bot announcements on this channel.')
+            await bot.send_message(
+                message.channel,
+                ':tada: | Main channel set! I will listen for commands and post my announcements on this channel.')
             return True
 
     else:
         log = 'User had insufficient permissions.'
         logwriter.write_log(log, logstore.userlog)
-        await messenger.send_timed_message(bot, 3,
-            config.ERR_WARNINGS['no_perm'], message.channel)
+        await messenger.send_timed_message(
+            bot, 5,
+            config.ERR_WARNINGS['no_perm'],
+            message.channel)
         return False

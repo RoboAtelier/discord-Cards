@@ -97,7 +97,7 @@ async def on_message(message):
 async def call_command(message, command, content, logstore):
 
     log = ('User {} attempted to call => \'{}\''.format(message.author.id, command)
-        + '\n\tInput passed => \'{}\'\n '.format(content))
+        + '\n\tInput passed => \'{}\''.format(content))
     logwriter.write_log(log, logstore.userlog)
 
     if message.channel.is_private:

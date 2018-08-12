@@ -44,13 +44,15 @@ async def prefix_command(message, bot, mongo, content, logstore):
             updatequeries.update_prefix(mongo, message.server, prefix)
             log = 'Server prefix changed to \'{}\''.format(prefix)
             logwriter.write_log(log, logstore.userlog, logstore.serverlog)
-            await bot.send_message(message.channel,
+            await bot.send_message(
+                message.channel,
                 ':bulb: | My prefix for this server has been set to \'**{}**\' '.format(prefix))
             return True
         else:
             log = 'Invalid input was sent => \'{}\''.format(content)
             logwriter.write_log(log, logstore.userlog)
-            messenger.send_timed_message(bot, 5,
+            messenger.send_timed_message(
+                bot, 5,
                 config.ERR_WARNINGS['invalid_in'] + ' Prefix must be **1-3 characters**.',
                 message.channel)
             return False
@@ -58,6 +60,7 @@ async def prefix_command(message, bot, mongo, content, logstore):
     else:
         log = 'User has insufficient permissions.'
         logwriter.write_log(log, logstore.userlog)
-        messenger.send_timed_message(bot, 3,
+        messenger.send_timed_message(
+            bot, 5,
             config.ERR_WARNINGS['no_perm'], message.channel)
         return False

@@ -36,7 +36,7 @@ def is_bot_admin(member, appinfo):
     """
 
     if (member.id == appinfo.owner.id
-        or member.id in feyadmins.admin_list):
+        or member.id in admins.ADMIN_LIST):
         return True
     else:
         return False
