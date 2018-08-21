@@ -1,24 +1,24 @@
 '''Delete queries using MongoDB'''
 
-def delete_alt_channel(mongo, server, channel):
+def delete_alt_channel(mongo, guild, channel):
 
     '''
     Deletes an alt channel from the database.
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to remove
     '''
 
-    mongo.fey.alt_channel.delete_one({
+    mongo.cards.alt_channel.delete_one({
         '$and': [
-            {'server_id': server.id},
+            {'guild_id': guild.id},
             {'channel_id': channel.id}
         ]
     })
-    mongo.fey.discord_server.update_one({'server_id': server.id},
+    mongo.cards.discord_guild.update_one({'guild_id': guild.id},
         {
             '$set': {'last_action': 'Deleted Alt Channel'},
             '$currentDate': {'date_last_modified': {'$type': 'date'}}

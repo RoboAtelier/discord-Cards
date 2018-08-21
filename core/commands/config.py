@@ -3,10 +3,11 @@
 from discord import Embed
 
 ERR_WARNINGS = {
-    'invalid_in': ':exclamation: | Invalid input. ',
-    'ambig': ':exclamation: | Ambiguous input. ',
-    'no_perm': 'no_entry_sign: | You don\'t have the necessary permissions. ',
-    'exception': ':exclamation: | ',
+    'invalid_in': ':error: | Invalid input. ',
+    'ambig': ':error: | Ambiguous input. ',
+    'no_perm': ':no_entry_sign: | You don\'t have the necessary permissions. ',
+    'no_act': ':no_entry_sign: | Can\'t do that. ',
+    'exclamation': ':exclamation: | ',
     'error': ':no_entry_sign: | '
 }
 

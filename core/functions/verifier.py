@@ -1,7 +1,7 @@
 from .. import admins
 from ..mongo import checkqueries
 
-def is_server_admin(member, channel):
+def is_guild_admin(member, channel):
 
     """
     Checks if the server member possesses the minimum permissions
@@ -41,7 +41,7 @@ def is_bot_admin(member, appinfo):
     else:
         return False
 
-def verify_channel(db, server, channel):
+def verify_channel(db, guild, channel):
     
     """
     Checks if the channel is allowed to listen to commands.
@@ -49,13 +49,13 @@ def verify_channel(db, server, channel):
 
     :param: `db` - mongo database
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to verify
     """
     
-    if (checkqueries.check_primary_channel(db, server, channel) or
-        checkqueries.check_alt_channel(db, server, channel)):
+    if (checkqueries.check_primary_channel(db, guild, channel) or
+        checkqueries.check_alt_channel(db, guild, channel)):
         return True
     else:
         return False

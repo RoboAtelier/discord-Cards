@@ -33,18 +33,22 @@ MONGO_ERR_LOG = logwriter.ERR_LOG_DIR + '\\mongo.err'
 
 class LogStore:
 
-    __slots__ = ['userlog', 'serverlog', 'dmlog']
+    __slots__ = ['userlog', 'guildlog', 'dmlog']
 
-    def __init__(self, userlog, serverlog, dmlog):
+    def __init__(self, userlog, guildlog, dmlog):
         self.userlog = userlog
-        self.serverlog = serverlog
+        self.guildlog = guildlog
         self.dmlog = dmlog
 
 @bot.event
 async def on_ready():
-    log = ('Cards are stacked and ready!'
-        + '\n\tBot name: {}#{}\n\tBot ID: {}'.format(bot.user.name, 
-        bot.user.discriminator, bot.user.id))
+    status = discord.Game(
+        name='a dangerous game.'
+    )
+    await bot.change_presence(game=status)
+    log = 'Cards are stacked and ready!'
+        #+ '\n\tBot name: {}#{}\n\tBot ID: {}'.format(bot.user.name, 
+        #bot.user.discriminator, bot.user.id))
     logwriter.write_log(log, BOT_LOG)
 
 @bot.event
@@ -64,15 +68,15 @@ async def on_message(message):
                 content = msgsplit[1].strip()
 
             if message.channel.is_private:
-                dmlog = logwriter.DM_LOG_DIR + '{}-{}#{}.log'.format(message.author.id,
+                dmlog = logwriter.DM_LOG_DIR + '\\{}-{}#{}.log'.format(message.author.id,
                 message.author.name, message.author.discriminator)
                 logstore = LogStore(userlog, '', dmlog)
                 print('private time')
                 #await call_command(message, cmd, content, logstore)
             else:
-                serverlog = logwriter.SERVER_LOG_DIR + '{}-{}.log'.format(message.server.id,
+                guildlog = logwriter.GUILD_LOG_DIR + '\\{}-{}.log'.format(message.server.id,
                 message.server.name)
-                logstore = LogStore(userlog, serverlog, '')
+                logstore = LogStore(userlog, guildlog, '')
                 find = findqueries.find_prefix(mongo, message.server)
                 if find.count(True) > 0:
                     prefix = find[0]['prefix']
@@ -80,8 +84,10 @@ async def on_message(message):
                         await call_command(message, cmd[len(prefix):], content, logstore)
                     elif message.content == 'ccprefix?':
                         if checkqueries.is_listening_channel(mongo, message.server, message.channel):
-                            messenger.send_timed_message(bot, 5,
-                                ':bulb: | My command prefix for this server: \'**{}**\''.format(prefix), message.channel)
+                            await messenger.send_timed_message(
+                                bot, 5,
+                                ':bulb: | My command prefix for this server: \'**{}**\''.format(prefix),
+                                message.channel)
                         #else: 
                             #messenger.send_timed_message(bot, 5,
                                 #':bulb: | My command prefix for *{}*: \'**{}**\''.format(message.server.name, prefix),
@@ -96,7 +102,7 @@ async def on_message(message):
 
 async def call_command(message, command, content, logstore):
 
-    log = ('User {} attempted to call => \'{}\''.format(message.author.id, command)
+    log = ('User {} (ID: {}) attempted to call => \'{}\''.format(message.author.name, message.author.id, command)
         + '\n\tInput passed => \'{}\''.format(content))
     logwriter.write_log(log, logstore.userlog)
 

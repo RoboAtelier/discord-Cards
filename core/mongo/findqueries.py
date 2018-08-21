@@ -1,6 +1,6 @@
 """Find/get queries using MongoDB"""
 
-def find_main_channel(mongo, server):
+def find_main_channel(mongo, guild):
 
     """
     Finds the main channel of a given discord server.
@@ -10,15 +10,15 @@ def find_main_channel(mongo, server):
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server to find
+    :param: `guild` - discord server to find
     """
 
-    return mongo.cards.discord_server.find(
-        {'server_id': server.id},
+    return mongo.cards.discord_guild.find(
+        {'guild_id': guild.id},
         {'main_channel_id': 1}
     ).limit(1)
 
-def find_channel_games(mongo, server, channel):
+def find_channel_games(mongo, guild, channel):
 
     """
     Finds the list of games available on a particular channel.
@@ -28,37 +28,37 @@ def find_channel_games(mongo, server, channel):
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to check
     """
 
-    check = mongo.cards.discord_server.find(
+    check = mongo.cards.discord_guild.find(
         {
             '$and': [
-                {'server_id': server.id},
+                {'guild_id': guild.id},
                 {'main_channel_id': channel.id}
             ],
         },
         {'_id': 1}
     ).limit(1).count(True)
     if check > 0:
-        return mongo.cards.discord_server.find(
-            {'server_id': server.id},
+        return mongo.cards.discord_guild.find(
+            {'guild_id': guild.id},
             {'main_channel_games': 1}
         ).limit(1)
     else:
         return mongo.cards.alt_channel.find(
             {
                 '$and': [
-                    {'server_id': server.id},
+                    {'guild_id': guild.id},
                     {'channel_id': channel.id}
                 ],
             },
             {'channel_games': 1}
         ).limit(1)
 
-def find_prefix(mongo, server):
+def find_prefix(mongo, guild):
 
     """
     Finds the command prefix of a given discord server.
@@ -68,15 +68,15 @@ def find_prefix(mongo, server):
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server to find
+    :param: `guild` - discord server to find
     """
 
-    return mongo.cards.discord_server.find(
-        {'server_id': server.id},
+    return mongo.cards.discord_guild.find(
+        {'guild_id': guild.id},
         {'prefix': 1}
     ).limit(1)
 
-def find_server_uno_session(mongo, server, channel):
+def find_guild_uno_session(mongo, guild, channel):
 
     """
     Finds a running UNO session on a given channel
@@ -86,16 +86,43 @@ def find_server_uno_session(mongo, server, channel):
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to check
     """
 
-    return mongo.cards.sv_uno_session.find(
+    return mongo.cards.gd_uno_session.find(
         {
             '$and': [
-                {'server_id': server.id},
+                {'guild_id': guild.id},
                 {'channel_id': channel.id}
             ]
+        },
+        {
+            '_id': 0,
+            'guild_id': 0
         }
     ).limit(1)
+
+def findall_guild_uno_session(mongo, guild):
+
+    """
+    Finds all running UNO session on a given server
+
+    Returns a cursor containing all UNO sessions on a server
+    or None if nothing was found.
+
+    :param: `mongo` - mongo client
+
+    :param: `guild` - discord server
+
+    :param: `channel` - discord channel to check
+    """
+
+    return mongo.cards.gd_uno_session.find(
+        {'guild_id': guild.id},
+        {
+            '_id': 0,
+            'guild_id': 0
+        }
+    )

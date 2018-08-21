@@ -1,18 +1,18 @@
 """Checks data with MongoDB"""
 
-def check_discord_server(mongo, server):
+def check_discord_guild(mongo, guild):
 
     """
-    Checks if a discord server is in the database.
+    Checks if a discord guild is in the database.
 
-    Returns True if the server is found.
+    Returns True if the guild is found.
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server to check
+    :param: `guild` - discord server to check
     """
-    check = mongo.cards.discord_server.find(
-        {'server_id': server.id},
+    check = mongo.cards.discord_guild.find(
+        {'guild_id': guild.id},
         {'_id': 1}
     ).limit(1).count(True)
     if check > 0:
@@ -20,7 +20,7 @@ def check_discord_server(mongo, server):
     else:
         return False
 
-def check_server_uno_session(mongo, server, channel):
+def check_guild_uno_session(mongo, guild, channel):
 
     """
     Checks if there is a running UNO session on a given channel.
@@ -29,15 +29,15 @@ def check_server_uno_session(mongo, server, channel):
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to check
     """
 
-    check = mongo.cards.sv_uno_session.find(
+    check = mongo.cards.gd_uno_session.find(
         {
             '$and': [
-                {'server_id': server.id},
+                {'guild_id': guild.id},
                 {'channel_id': channel.id}
             ]
         },
@@ -48,24 +48,24 @@ def check_server_uno_session(mongo, server, channel):
     else:
         return False
 
-def is_main_channel(mongo, server, channel):
+def is_main_channel(mongo, guild, channel):
 
     """
-    Checks if a given channel is the main channel of the server.
+    Checks if a given channel is the main channel of the guild.
 
     Returns True if the channel is the main channel.
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to check
     """
 
-    check = mongo.cards.discord_server.find(
+    check = mongo.cards.discord_guild.find(
         {
             '$and': [
-                {'server_id': server.id},
+                {'guild_id': guild.id},
                 {'main_channel_id': channel.id}
             ],
         },
@@ -76,16 +76,16 @@ def is_main_channel(mongo, server, channel):
     else:
         return False
 
-def is_alt_channel(mongo, server, channel):
+def is_alt_channel(mongo, guild, channel):
 
     """
-    Checks if a given channel is an alt channel of the server.
+    Checks if a given channel is an alt channel of the guild.
 
     Returns True if the channel is an alt channel.
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to check
     """
@@ -93,7 +93,7 @@ def is_alt_channel(mongo, server, channel):
     check = mongo.cards.alt_channel.find(
         {
             '$and': [
-                {'server_id': server.id},
+                {'guild_id': guild.id},
                 {'channel_id': channel.id}
             ]
         },
@@ -104,7 +104,7 @@ def is_alt_channel(mongo, server, channel):
     else:
         return False
 
-def is_listening_channel(mongo, server, channel):
+def is_listening_channel(mongo, guild, channel):
 
     """
     Checks if a given channel can listen for commands.
@@ -113,13 +113,13 @@ def is_listening_channel(mongo, server, channel):
 
     :param: `mongo` - mongo client
 
-    :param: `server` - discord server
+    :param: `guild` - discord server
 
     :param: `channel` - discord channel to check
     """
 
-    mcheck = is_main_channel(mongo, server, channel)
-    acheck = is_alt_channel(mongo, server, channel)
+    mcheck = is_main_channel(mongo, guild, channel)
+    acheck = is_alt_channel(mongo, guild, channel)
     if mcheck or acheck:
         return True
     else:

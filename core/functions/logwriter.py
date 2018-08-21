@@ -10,7 +10,7 @@ from datetime import datetime
 LOG_DIR = path.dirname(path.dirname(__file__)) + '\\logs'
 ERR_LOG_DIR = LOG_DIR + '\\error'
 USER_LOG_DIR = LOG_DIR + '\\user'
-SERVER_LOG_DIR = LOG_DIR + '\\server'
+GUILD_LOG_DIR = LOG_DIR + '\\guild'
 DM_LOG_DIR = LOG_DIR + '\\dm'
 
 def write_log(log, *paths):

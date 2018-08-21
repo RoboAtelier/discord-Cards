@@ -34,9 +34,9 @@ async def ignore_command(message, bot, mongo, content, logstore):
     :param: `logstore` - class containing log paths
     """
 
-    # Check necessary permissions and server registration
+    # Check necessary permissions and guild registration
     appinfo = await bot.application_info()
-    if (verifier.is_server_admin(message.author, message.channel)
+    if (verifier.is_guild_admin(message.author, message.channel)
         or verifier.is_bot_admin(message.author, appinfo)):
 
         if checkqueries.is_alt_channel(mongo, message.server, message.channel):
@@ -44,7 +44,7 @@ async def ignore_command(message, bot, mongo, content, logstore):
             deletequeries.delete_alt_channel(mongo, message.server, message.channel)
             log = '#{} (ID: {}) is no longer an alt channel for this server.'.format(
                 message.channel.name, message.channel.id)
-            logwriter.write_log(log, logstore.userlog, logstore.serverlog)
+            logwriter.write_log(log, logstore.userlog, logstore.guildlog)
             await bot.send_message(
                 message.channel,
                 ':no_bell: | I will no longer listen to commands here.')

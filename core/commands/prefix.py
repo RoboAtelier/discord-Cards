@@ -34,7 +34,7 @@ async def prefix_command(message, bot, mongo, content, logstore):
 
     # Check necessary permissions
     appinfo = await bot.application_info()
-    if (verifier.is_server_admin(message.author, message.channel)
+    if (verifier.is_guild_admin(message.author, message.channel)
         or verifier.is_bot_admin(message.author, appinfo)):
 
         prefix = content.lstrip()
@@ -43,7 +43,7 @@ async def prefix_command(message, bot, mongo, content, logstore):
         if len(prefix) > 0 and len(prefix) <= 3:
             updatequeries.update_prefix(mongo, message.server, prefix)
             log = 'Server prefix changed to \'{}\''.format(prefix)
-            logwriter.write_log(log, logstore.userlog, logstore.serverlog)
+            logwriter.write_log(log, logstore.userlog, logstore.guildlog)
             await bot.send_message(
                 message.channel,
                 ':bulb: | My prefix for this server has been set to \'**{}**\' '.format(prefix))

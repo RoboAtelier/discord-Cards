@@ -33,9 +33,9 @@ async def listen_command(message, bot, mongo, content, logstore):
     :param: `logstore` - class containing log paths
     """
 
-    # Check necessary permissions and server registration
+    # Check necessary permissions and guild registration
     appinfo = await bot.application_info()
-    if (verifier.is_server_admin(message.author, message.channel)
+    if (verifier.is_guild_admin(message.author, message.channel)
         or verifier.is_bot_admin(message.author, appinfo)):
 
         option = ''
@@ -88,13 +88,13 @@ async def listen_command(message, bot, mongo, content, logstore):
                     message.channel)
                 return False
 
-        elif checkqueries.check_discord_server(mongo, message.server):
+        elif checkqueries.check_discord_guild(mongo, message.server):
 
             # Insert new alt channel into the database
             insertqueries.insert_alt_channel(mongo, message.server, message.channel)
             log = '#{} (ID: {}) has been added as a new alt channel for the server.'.format(
                 message.channel.name, message.channel.id)
-            logwriter.write_log(log, logstore.userlog, logstore.serverlog)
+            logwriter.write_log(log, logstore.userlog, logstore.guildlog)
             await bot.send_message(
                 message.channel,
                 ':tada: | I will now listen for commands on this channel.')
@@ -102,10 +102,10 @@ async def listen_command(message, bot, mongo, content, logstore):
 
         else:
 
-            # Insert new discord server into the database
-            insertqueries.insert_discord_server(mongo, message.server, message.channel)
+            # Insert new discord guild into the database
+            insertqueries.insert_discord_guild(mongo, message.server, message.channel)
             log = 'Server is now registered into the database.'
-            logwriter.write_log(log, logstore.userlog, logstore.serverlog)
+            logwriter.write_log(log, logstore.userlog, logstore.guildlog)
             await bot.send_message(
                 message.channel,
                 ':tada: | Main channel set! I will listen for commands and post my announcements on this channel.')
