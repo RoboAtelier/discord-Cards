@@ -3,11 +3,10 @@
 from discord import Embed
 
 ERR_WARNINGS = {
-    'invalid_in': ':error: | Invalid input. ',
-    'ambig': ':error: | Ambiguous input. ',
+    'invalid_in': ':no_entry_sign: | Invalid input. ',
+    'ambig': ':no_entry_sign: | Ambiguous input. ',
     'no_perm': ':no_entry_sign: | You don\'t have the necessary permissions. ',
     'no_act': ':no_entry_sign: | Can\'t do that. ',
-    'exclamation': ':exclamation: | ',
     'error': ':no_entry_sign: | '
 }
 
@@ -115,3 +114,6 @@ PREFIX_INFO = ('Changes the command prefix for this particular server.'
     + '\n**[Required]**'
     + '\n\nExample: `ccprefix /` - changes prefix to \'/\''
     + '\n\nAliases: `pre`')
+
+# UNO command
+UNO_KEYWORDS = ('uno', 'uno!')

@@ -51,7 +51,7 @@ async def prefix_command(message, bot, mongo, content, logstore):
         else:
             log = 'Invalid input was sent => \'{}\''.format(content)
             logwriter.write_log(log, logstore.userlog)
-            messenger.send_timed_message(
+            await messenger.send_timed_message(
                 bot, 5,
                 config.ERR_WARNINGS['invalid_in'] + ' Prefix must be **1-3 characters**.',
                 message.channel)

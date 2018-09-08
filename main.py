@@ -3,7 +3,7 @@ import discord
 import logging
 import re
 from core import token
-from core.commands import config, ignore, listen, prefix
+from core.commands import config, ignore, listen, prefix, uno
 from core.functions import logwriter, messenger
 from core.mongo import credentials, checkqueries, findqueries
 from pymongo import MongoClient, errors
@@ -62,7 +62,7 @@ async def on_message(message):
                 message.author.name, message.author.discriminator)       
 
             msgsplit = message.content.split(' ', 1)
-            cmd = msgsplit[0]
+            cmd = msgsplit[0].lower()
             content = ''
             if len(msgsplit) > 1:
                 content = msgsplit[1].strip()
@@ -114,7 +114,12 @@ async def call_command(message, command, content, logstore):
         elif checkqueries.is_listening_channel:
             if command in config.IGNORE_KEYWORDS:
                 await ignore.ignore_command(message, bot, mongo, content, logstore)
-            if command in config.PREFIX_KEYWORDS:
+            elif command in config.PREFIX_KEYWORDS:
                 await prefix.prefix_command(message, bot, mongo, content, logstore)
+            elif command in config.UNO_KEYWORDS:
+                if '!' in command:
+                    await uno.uno_command(message, bot, mongo, '! ' + content, logstore)
+                else:
+                    await uno.uno_command(message, bot, mongo, content, logstore)
 
 bot.run(token.BOT_TOKEN)
