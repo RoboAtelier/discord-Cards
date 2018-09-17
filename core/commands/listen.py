@@ -73,7 +73,7 @@ async def listen_command(message, bot, mongo, content, logstore):
                 deletequeries.delete_alt_channel(mongo, message.server, message.channel)
                 log = '#{} (ID: {}) is now set as the main channel of the server.'.format(
                     message.channel.name, message.channel.id)
-                logwriter.write_log(log, logstore.userlog, logstore.serverlog)
+                logwriter.write_log(log, logstore.userlog, logstore.guildlog)
                 await bot.send_message(
                     message.channel,
                     ':tada: | {} is now the main channel! Bot announcements will be posted here.'.format(

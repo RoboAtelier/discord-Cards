@@ -2,11 +2,8 @@ from .. import admins
 from ..mongo import checkqueries
 
 def is_guild_admin(member, channel):
-
-    """
-    Checks if the server member possesses the minimum permissions
+    """Checks if the server member possesses the minimum permissions
     to add or change bots in the server (e.g. Manage Servers+).
-    Returns true if member has required permissions.
 
     :param: `member` - user in the discord server
 

@@ -1,8 +1,8 @@
 """
 `uno` command:
 
-UNO game module.
-Contains the necessary components to run an UNO game session.
+UNO command module.
+Contains the necessary components to create, edit, and run an UNO game session.
 """
 
 from asyncio import ensure_future, sleep

@@ -45,7 +45,7 @@ def find_channel_games(mongo, guild, channel):
     if check > 0:
         return mongo.cards.discord_guild.find(
             {'guild_id': guild.id},
-            {'main_channel_games': 1}
+            {'channel_games': 1}
         ).limit(1)
     else:
         return mongo.cards.alt_channel.find(
@@ -98,10 +98,7 @@ def find_guild_uno_session(mongo, guild, channel):
                 {'channel_id': channel.id}
             ]
         },
-        {
-            '_id': 0,
-            'guild_id': 0
-        }
+        {'_id': 0}
     ).limit(1)
 
 def findall_guild_uno_session(mongo, guild):
@@ -121,8 +118,5 @@ def findall_guild_uno_session(mongo, guild):
 
     return mongo.cards.gd_uno_session.find(
         {'guild_id': guild.id},
-        {
-            '_id': 0,
-            'guild_id': 0
-        }
+        {'_id': 0}
     )

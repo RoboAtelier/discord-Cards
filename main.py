@@ -3,7 +3,7 @@ import discord
 import logging
 import re
 from core import token
-from core.commands import config, ignore, listen, prefix, uno
+from core.commands import config, ignore, helpcmd, listen, prefix, uno
 from core.functions import logwriter, messenger
 from core.mongo import credentials, checkqueries, findqueries
 from pymongo import MongoClient, errors
@@ -60,7 +60,6 @@ async def on_message(message):
         try:
             userlog = logwriter.USER_LOG_DIR + '\\{}-{}#{}.log'.format(message.author.id,
                 message.author.name, message.author.discriminator)       
-
             msgsplit = message.content.split(' ', 1)
             cmd = msgsplit[0].lower()
             content = ''
@@ -81,7 +80,7 @@ async def on_message(message):
                 if find.count(True) > 0:
                     prefix = find[0]['prefix']
                     if message.content.startswith(prefix):
-                        await call_command(message, cmd[len(prefix):], content, logstore)
+                        await call_command(message, cmd[len(prefix):], mongo, content, logstore)
                     elif message.content == 'ccprefix?':
                         if checkqueries.is_listening_channel(mongo, message.server, message.channel):
                             await messenger.send_timed_message(
@@ -94,13 +93,13 @@ async def on_message(message):
                                 #message.author)
                 elif message.content.startswith('cc'):
                     print('not registered')
-                    await call_command(message, cmd[2:], content, logstore)
+                    await call_command(message, cmd[2:], mongo, content, logstore)
 
         except Exception as err:
             print('oof')
             print(err)
 
-async def call_command(message, command, content, logstore):
+async def call_command(message, command, mongo, content, logstore):
 
     log = ('User {} (ID: {}) attempted to call => \'{}\''.format(message.author.name, message.author.id, command)
         + '\n\tInput passed => \'{}\''.format(content))
@@ -111,7 +110,9 @@ async def call_command(message, command, content, logstore):
     else:
         if command in config.LISTEN_KEYWORDS:
             await listen.listen_command(message, bot, mongo, content, logstore)
-        elif checkqueries.is_listening_channel:
+        elif command in config.HELP_KEYWORDS:
+            await helpcmd.help_command(message, bot, mongo, content, logstore)
+        elif checkqueries.is_listening_channel(mongo, message.server, message.channel):
             if command in config.IGNORE_KEYWORDS:
                 await ignore.ignore_command(message, bot, mongo, content, logstore)
             elif command in config.PREFIX_KEYWORDS:
