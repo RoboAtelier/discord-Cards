@@ -28,7 +28,6 @@ def insert_discord_guild(mongo, guild, channel):
     :param: `channel` - discord channel to set as main
     """
 
-    # Store the guild id and the channel id of where the channel called on
     new_discordguild = {
         'guild_id': guild.id,
         'main_channel_id': channel.id,
@@ -42,30 +41,26 @@ def insert_discord_guild(mongo, guild, channel):
         {'$currentDate': {'date_last_modified': {'$type': 'date'}}}
     )
 
-def insert_alt_channel(mongo, guild, channel):
-
-    """
-    Inserts a new alt channel into the database.
+def insert_alt_channel(mongo, guild, channel, *games):
+    """Inserts a channel as a new alt channel for a guild into the database.
     Bot commands can be used on alt channels.
 
-    :param: `mongo` - mongo client
-
-    :param: `guild` - discord server
-
-    :param: `channel` - discord channel to store
+    Args:
+        mongo (pymongo.MongoClient): MongoDB client connection
+        guild (discord.Guild): Discord guild object
+        channel (discord.Channel): Discord channel object related to guild
     """
 
-    # Selected data from the discord channel to store
     new_altchannel = {
+        'guild_id': guild.id,
         'channel_id': channel.id,
-        'channel_games': [],
-        'guild_id': guild.id
+        'channel_games': games
     }
     mongo.cards.alt_channel.insert_one(new_altchannel)
     mongo.cards.discord_guild.update_one(
         {'guild_id': guild.id},
         {
-            '$set': {'last_change': 'Added Alt Channel'},
+            '$set': {'last_action': 'Added Alt Channel'},
             '$currentDate': {'date_last_modified': {'$type': 'date'}}
         }
     )

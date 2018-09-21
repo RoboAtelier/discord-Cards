@@ -1,36 +1,38 @@
 """Find/get queries using MongoDB"""
 
 def find_main_channel(mongo, guild):
+    """Finds the main channel of a given discord server.
 
+    Args:
+        mongo (pymongo.MongoClient): MongoDB client connection
+        guild (discord.Guild): Discord guild object
+
+    Returns:
+        A dictionary containing the main channel id and its games
+        or None if nothing was found
     """
-    Finds the main channel of a given discord server.
 
-    Returns a cursor containing the main channel id
-    or None if nothing was found.
-
-    :param: `mongo` - mongo client
-
-    :param: `guild` - discord server to find
-    """
-
-    return mongo.cards.discord_guild.find(
+    find = mongo.cards.discord_guild.find(
         {'guild_id': guild.id},
-        {'main_channel_id': 1}
+        {
+            'main_channel_id': 1,
+            'channel_games': 1
+        }
     ).limit(1)
+    if find.count(True) > 0:
+        return find[0]
+    return None
 
 def find_channel_games(mongo, guild, channel):
+    """Finds the list of games available on a particular channel.
 
-    """
-    Finds the list of games available on a particular channel.
+    Args:
+        mongo (pymongo.MongoClient): MongoDB client connection
+        guild (discord.Guild): Discord guild object
 
-    Returns a cursor containing the a list of game types available
-    or None if nothing was found.
-
-    :param: `mongo` - mongo client
-
-    :param: `guild` - discord server
-
-    :param: `channel` - discord channel to check
+    Returns:
+        A dictionary containing the games available
+        on the channel or None if nothing was found
     """
 
     check = mongo.cards.discord_guild.find(

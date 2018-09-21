@@ -1,24 +1,23 @@
 """Checks data with MongoDB"""
 
 def check_discord_guild(mongo, guild):
+    """Checks if a discord guild is in the database
 
+    Args:
+        mongo (pymongo.MongoClient): MongoDB client connection
+        guild (discord.Guild): Discord guild object
+
+    Returns:
+        A bool indicating if the guild is in the database.
     """
-    Checks if a discord guild is in the database.
 
-    Returns True if the guild is found.
-
-    :param: `mongo` - mongo client
-
-    :param: `guild` - discord server to check
-    """
     check = mongo.cards.discord_guild.find(
         {'guild_id': guild.id},
         {'_id': 1}
     ).limit(1).count(True)
     if check > 0:
         return True
-    else:
-        return False
+    return False
 
 def check_guild_uno_session(mongo, guild, channel):
 
@@ -49,17 +48,16 @@ def check_guild_uno_session(mongo, guild, channel):
         return False
 
 def is_main_channel(mongo, guild, channel):
+    """Checks if a channel is the main listening channel of the guild
 
-    """
-    Checks if a given channel is the main channel of the guild.
+    Args:
+        mongo (pymongo.MongoClient): MongoDB client connection
+        guild (discord.Guild): Discord guild object
+        channel (discord.Channel): Discord channel object
 
-    Returns True if the channel is the main channel.
-
-    :param: `mongo` - mongo client
-
-    :param: `guild` - discord server
-
-    :param: `channel` - discord channel to check
+    Returns:
+        A bool indicating if the given channel is
+        the main listening channel of the guild.
     """
 
     check = mongo.cards.discord_guild.find(
@@ -73,8 +71,7 @@ def is_main_channel(mongo, guild, channel):
     ).limit(1).count(True)
     if check > 0:
         return True
-    else:
-        return False
+    return False
 
 def is_alt_channel(mongo, guild, channel):
 
