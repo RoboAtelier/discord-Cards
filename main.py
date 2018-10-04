@@ -47,8 +47,6 @@ async def on_ready():
     )
     await bot.change_presence(game=status)
     log = 'Cards are stacked and ready!'
-        #+ '\n\tBot name: {}#{}\n\tBot ID: {}'.format(bot.user.name, 
-        #bot.user.discriminator, bot.user.id))
     logwriter.write_log(log, BOT_LOG)
 
 @bot.event

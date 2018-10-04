@@ -1,11 +1,11 @@
 """Contains core command configuration settings"""
 
 ERR_WARNINGS = {
-    'invalid_in': ':no_entry_sign: | Invalid input. ',
-    'ambig': ':no_entry_sign: | Ambiguous input. ',
-    'no_perm': ':no_entry_sign: | You don\'t have the necessary permissions. ',
-    'no_act': ':no_entry_sign: | Can\'t do that. ',
-    'error': ':no_entry_sign: | '
+    'invalid_in': ':no_entry_sign: Invalid input. ',
+    'ambig': ':no_entry_sign: Ambiguous input. ',
+    'no_perm': ':no_entry_sign: You don\'t have the necessary permissions. ',
+    'no_act': ':no_entry_sign: Can\'t do that. ',
+    'error': ':no_entry_sign: '
 }
 
 # Listen command

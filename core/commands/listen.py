@@ -5,8 +5,9 @@ Allows the bot to listen for commands on a chosen channel.
 Required for all servers to use first before other commands are unlocked.
 """
 
+from asyncio import ensure_future
 from . import config
-from ..functions import logwriter, messenger, parameterizer, verifier
+from ..functions import logwriter, messenger, verifier
 from ..mongo import checkqueries, deletequeries, insertqueries, updatequeries
 
 async def listen_command(message, bot, mongo, content, logstore):
@@ -31,34 +32,29 @@ async def listen_command(message, bot, mongo, content, logstore):
     # Check necessary permissions and guild registration.
     if verifier.is_guild_admin(message.author, message.channel):
 
-        log = ''
+        log = 'Nothing action taken.'
         dmsg = ''
-        option = ''
+        option = 'NNN'
         params = ''
         if len(content) > 0:
             csplit = content.split(' ', 1)
-            option = csplit[0]
+            option = csplit[0].lower()
             if len(csplit) > 1:
                 params = csplit[1]
 
         if checkqueries.is_main_channel(mongo, message.server, message.channel):
 
             if 'main'.startswith(option) or option in ('-m'):
-                log = 'Nothing happened.'
-                dmsg = config.ERR_WARNINGS['error'] + 'This is already the main channel.'
+                dmsg = ':no_entry_sign: This is already the main channel.'
             elif 'games'.startswith(option) or option in ('-g'):
                 # Change channel games
                 return await change_channel_games(message, bot, mongo, params, logstore)
             else:
-                log = 'Nothing happened.'
-                dmsg = config.ERR_WARNINGS['error'] + 'I\'m already listening on this channel.'
-            logwriter.write_log(log, logstore.userlog)
-            await messenger.send_timed_message(bot, 5, dmsg, message.channel)
-            return False
+                dmsg = ':no_entry_sign: I\'m already listening on this channel.'
 
         elif checkqueries.is_alt_channel(mongo, message.server, message.channel):
 
-            if option in ('-m', 'main'):
+            if 'main'.startswith(option) or option in ('-m'):
                 # Set new main channel and change old main channel to alt channel
                 updatequeries.change_alt_main(mongo, message.server, message.channel)
                 log = 'Set new main channel for {} (ID: {}) guild.'.format(
@@ -76,15 +72,11 @@ async def listen_command(message, bot, mongo, content, logstore):
                 # Change channel games
                 return await change_channel_games(message, bot, mongo, params, logstore)
             else:
-                log = 'Nothing happened.'
                 dmsg = ':no_entry_sign: I\'m already listening on this channel.'
-            logwriter.write_log(log, logstore.userlog)
-            await messenger.send_timed_message(bot, 5, dmsg, message.channel)
-            return False
 
         elif checkqueries.check_discord_guild(mongo, message.server):
 
-            if option in ('-m', 'main'):
+            if 'main'.startswith(option) or option in ('-m'):
                 # Set new main channel and change old main channel to alt channel
                 updatequeries.change_alt_main(mongo, message.server, message.channel)
                 log = 'Set new main channel for {} (ID: {}) guild.'.format(
@@ -132,13 +124,20 @@ async def listen_command(message, bot, mongo, content, logstore):
             await bot.send_message(message.channel, dmsg)
             return True
 
-    else:
-        log = 'User had insufficient permissions.'
         logwriter.write_log(log, logstore.userlog)
-        await messenger.send_timed_message(
-            bot, 5,
-            config.ERR_WARNINGS['no_perm'],
-            message.channel)
+        ensure_future(
+            messenger.send_timed_message(bot, 5, dmsg, message.channel)
+        )
+        return False
+
+    else:
+        log = 'Insufficient permissions.'
+        logwriter.write_log(log, logstore.userlog)
+        ensure_future(
+            messenger.send_timed_message(
+                bot, 5, config.ERR_WARNINGS['no_perm'], message.channel
+            )
+        )
         return False
 
 async def change_channel_games(message, bot, mongo, params, logstore):
@@ -159,9 +158,11 @@ async def change_channel_games(message, bot, mongo, params, logstore):
 
     if params == '':
         log = 'Nothing happened.'
-        dmsg = ':no_entry_sign: You must mention at least one game.'
+        dmsg = ':no_entry_sign: You must provide input.'
         logwriter.write_log(log, logstore.userlog)
-        await messenger.send_timed_message(bot, 5, dmsg, message.channel)
+        ensure_future(
+            messenger.send_timed_message(bot, 5, dmsg, message.channel)
+        )
         return False
     else:
         games = []

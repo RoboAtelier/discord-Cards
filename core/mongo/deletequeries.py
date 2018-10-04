@@ -1,16 +1,13 @@
-'''Delete queries using MongoDB'''
+"""Delete queries using MongoDB"""
 
 def delete_alt_channel(mongo, guild, channel):
+    """Deletes an alt channel from the database
 
-    '''
-    Deletes an alt channel from the database.
-
-    :param: `mongo` - mongo client
-
-    :param: `guild` - discord server
-
-    :param: `channel` - discord channel to remove
-    '''
+    Args:
+        mongo (pymongo.MongoClient): MongoDB client connection
+        guild (discord.Guild): Discord guild object
+        channel (discord.Channel): Discord channel object related to guild
+    """
 
     mongo.cards.alt_channel.delete_one({
         '$and': [

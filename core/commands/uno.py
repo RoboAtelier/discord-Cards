@@ -1,5 +1,4 @@
-"""
-`uno` command:
+"""`uno` command:
 
 UNO command module.
 Contains the necessary components to create, edit, and run an UNO game session.
